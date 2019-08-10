@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Character, { CharNames } from '../../Character';
+import { CellArea } from '../BoardContext';
 
 const S = {
   Cell: styled.div<{ isEven: boolean; isOver?: boolean; canDrop: boolean }>`
@@ -31,6 +32,7 @@ const S = {
 export default function Cell(props: {
   x: number;
   y: number;
+  area: CellArea;
   character?: {
     name: CharNames;
     level: 1 | 2 | 3;
@@ -52,6 +54,7 @@ export default function Cell(props: {
           name={props.character.name}
           x={props.x}
           y={props.y}
+          area={props.area}
         />
       )}
     </S.Cell>

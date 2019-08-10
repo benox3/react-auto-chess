@@ -4,6 +4,7 @@ import characters, { CharNames } from './characters';
 import { useDrag } from 'react-dnd';
 import { DraggableTypes } from '../../../types';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { CellArea } from '../components/BoardContext';
 
 export const S = {
   Character: styled.div<{ src: string; isDragging: boolean }>`
@@ -27,6 +28,7 @@ export default function Character(props: {
   level: 1 | 2 | 3;
   x: number;
   y: number;
+  area: CellArea
 }) {
   const character = characters[props.name].levels[props.level];
   const [{ isDragging }, drag, preview] = useDrag({
@@ -35,6 +37,7 @@ export default function Character(props: {
       character,
       x: props.x,
       y: props.y,
+      area: props.area,
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),

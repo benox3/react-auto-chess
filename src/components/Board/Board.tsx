@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { ROWS } from '../../constants';
 import BoardCell from './components/BoardCell';
-import { BoardContext } from './components/BoardContext';
+import { BoardContext, CellArea } from './components/BoardContext';
 
 const S = {
   Game: styled.div`
@@ -50,6 +49,7 @@ export default function Board() {
                 character={state.board[colIndex][rowIndex]}
                 x={rowIndex}
                 y={colIndex}
+                area={CellArea.BOARD}
               />
             ))}
           </S.Row>
@@ -57,8 +57,18 @@ export default function Board() {
       </S.Board>
       <S.Space />
       <S.Deck>
-        {[...new Array(ROWS)].map((_, rowIndex) => (
-          <BoardCell key={rowIndex} x={rowIndex} y={-2} />
+        {state.deck.map((rows, colIndex) => (
+          <S.Row key={colIndex}>
+            {rows.map((_, rowIndex) => (
+              <BoardCell
+                key={rowIndex}
+                character={state.deck[colIndex][rowIndex]}
+                x={rowIndex}
+                y={colIndex}
+                area={CellArea.DECK}
+              />
+            ))}
+          </S.Row>
         ))}
       </S.Deck>
     </S.Game>
