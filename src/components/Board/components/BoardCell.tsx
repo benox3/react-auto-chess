@@ -7,47 +7,54 @@ import { BoardContext, ActionType } from './BoardContext';
 import getCanDrop from '../lib/getCanDrop';
 
 export interface DragItem {
-	id: string;
-	type: string;
-	x: number;
-	y: number;
+  id: string;
+  type: string;
+  x: number;
+  y: number;
 }
 
 export interface BoardSquareProps {
-	x: number;
-	y: number;
-	character?: {
-		name: CharNames;
-		level: 1 | 2 | 3;
-	};
+  x: number;
+  y: number;
+  character?: {
+    name: CharNames;
+    level: 1 | 2 | 3;
+  };
 }
 
 export default function BoardSquare({ x, y, character }: BoardSquareProps) {
-	const { dispatch } = useContext(BoardContext);
+  const { dispatch } = useContext(BoardContext);
 
-	const [{ isOver, canDrop }, drop] = useDrop({
-		accept: DraggableTypes.CHARACTER,
-		canDrop: () => getCanDrop(y),
-		drop(item: DragItem) {
-			dispatch({
-				type: ActionType.MOVE_CHARACTER,
-				payload: {
-					fromX: item.x,
-					fromY: item.y,
-					toX: x,
-					toY: y,
-				},
-			});
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: DraggableTypes.CHARACTER,
+    canDrop: () => getCanDrop(y),
+    drop(item: DragItem) {
+      dispatch({
+        type: ActionType.MOVE_CHARACTER,
+        payload: {
+          fromX: item.x,
+          fromY: item.y,
+          toX: x,
+          toY: y,
+        },
+      });
 
-			return undefined;
-		},
-		collect: monitor => ({
-			isOver: !!monitor.isOver(),
-			canDrop: !!monitor.canDrop(),
-		}),
-	});
+      return undefined;
+    },
+    collect: monitor => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
+    }),
+  });
 
-	return (
-		<Cell canDrop={canDrop} isOver={isOver} dropRef={drop} x={x} y={y} character={character} />
-	);
+  return (
+    <Cell
+      canDrop={canDrop}
+      isOver={isOver}
+      dropRef={drop}
+      x={x}
+      y={y}
+      character={character}
+    />
+  );
 }
