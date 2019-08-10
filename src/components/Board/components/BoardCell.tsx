@@ -1,0 +1,52 @@
+import React, { useContext } from 'react';
+import Cell from './Cell';
+import { CharNames } from '../Character';
+import { useDrop } from 'react-dnd';
+import { DraggableTypes } from '../../../types';
+import { BoardContext, ActionType } from './BoardContext';
+
+export interface DragItem {
+	id: string;
+	type: string;
+	x: number;
+	y: number;
+}
+
+export interface BoardSquareProps {
+	x: number;
+	y: number;
+	character?: {
+		name: CharNames;
+		level: 1 | 2 | 3;
+	};
+}
+
+export default function BoardSquare({ x, y, character }: BoardSquareProps) {
+	const { dispatch } = useContext(BoardContext);
+
+	const [{ isOver }, drop] = useDrop({
+		accept: DraggableTypes.CHARACTER,
+		canDrop: () => true,
+		drop(item: DragItem) {
+			dispatch({
+				type: ActionType.MOVE_CHARACTER,
+				payload: {
+					fromX: item.x,
+					fromY: item.y,
+					toX: x,
+					toY: y,
+				},
+			});
+
+			return undefined;
+		},
+		collect: monitor => ({
+			isOver: !!monitor.isOver(),
+			canDrop: !!monitor.canDrop(),
+		}),
+	});
+
+	return (
+		<Cell isOver={isOver} dropRef={drop} x={x} y={y} character={character} />
+	);
+}

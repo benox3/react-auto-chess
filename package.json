@@ -28,13 +28,21 @@
     "typescript": "3.5.3"
   },
   "devDependencies": {
-    "@types/styled-components": "^4.1.18"
+    "@types/styled-components": "^4.1.18",
+    "eslint-config-prettier": "^6.0.0"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": ["react-app", "prettier"],
+    "rules": {
+      "no-unexpected-multiline": false
+    }
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
