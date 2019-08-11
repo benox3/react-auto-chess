@@ -3,7 +3,9 @@ export enum CharNames {
   SORCERER = 'sorcerer',
 }
 
-export type Level = {
+export type CharLevel =  1 | 2 | 3;
+
+export type Character = {
   hp: number;
   damage: number;
   attacksPerSecond: number;

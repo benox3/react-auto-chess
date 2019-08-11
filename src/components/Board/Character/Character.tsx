@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import characters, { CharNames } from './characters';
+import characters, { CharNames, CharLevel } from './characters';
 import { useDrag } from 'react-dnd';
 import { DraggableTypes } from '../../../types';
 import { getEmptyImage } from 'react-dnd-html5-backend';
@@ -25,10 +25,10 @@ export const S = {
 
 export default function Character(props: {
   name: CharNames;
-  level: 1 | 2 | 3;
+  level: CharLevel;
   x: number;
   y: number;
-  area: CellArea
+  area: CellArea;
 }) {
   const character = characters[props.name].levels[props.level];
   const [{ isDragging }, drag, preview] = useDrag({
@@ -38,6 +38,7 @@ export default function Character(props: {
       x: props.x,
       y: props.y,
       area: props.area,
+      level: props.level,
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
