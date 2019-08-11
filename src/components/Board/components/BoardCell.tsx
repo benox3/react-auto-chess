@@ -17,24 +17,21 @@ export interface DragItem {
 export interface BoardSquareProps {
   x: number;
   y: number;
-  character?: {
-    name: CharNames;
-    level: 1 | 2 | 3;
-  };
+  characterId?: string;
   area: CellArea;
 }
 
 export default function BoardSquare({
   x,
   y,
-  character,
+  characterId,
   area,
 }: BoardSquareProps) {
   const { dispatch } = useContext(BoardContext);
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: DraggableTypes.CHARACTER,
-    canDrop: () => getCanDrop(y, area),
+    canDrop: () => getCanDrop(x, area),
     drop(item: DragItem) {
       dispatch({
         type: ActionType.MOVE_CHARACTER,
@@ -64,7 +61,7 @@ export default function BoardSquare({
       dropRef={drop}
       x={x}
       y={y}
-      character={character}
+      characterId={characterId}
     />
   );
 }

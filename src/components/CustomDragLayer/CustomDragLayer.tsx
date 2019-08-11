@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDragLayer } from 'react-dnd';
 import styled from 'styled-components';
 import { DraggableTypes } from '../../types';
 import DraggableCharacter from '../Board/Character/components/DraggableCharacter';
+import { BoardContext } from '../Board/components/BoardContext';
+import characters from '../Board/Character/characters';
 
 type StyledItemStyles = {
   initialOffset: null | { x: number; y: number };
@@ -40,6 +42,7 @@ const S = {
 };
 
 export default function CustomDragLayer() {
+  const { state } = useContext(BoardContext);
   const {
     itemType,
     isDragging,
@@ -56,8 +59,14 @@ export default function CustomDragLayer() {
 
   function renderItem() {
     switch (itemType) {
-      case DraggableTypes.CHARACTER:
-        return <DraggableCharacter src={item.character.image} />;
+      case DraggableTypes.CHARACTER: {
+        const character =
+          characters[state.ownedCharacters.byId[item.id].name].levels[
+            state.ownedCharacters.byId[item.id].level
+          ];
+
+        return <DraggableCharacter src={character.image} />;
+      }
       default:
         return null;
     }

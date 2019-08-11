@@ -21,10 +21,7 @@ export interface DragItem {
 export interface BoardSquareProps {
   x: number;
   y: number;
-  character?: {
-    name: CharNames;
-    level: CharLevel;
-  };
+  characterId?: string;
   area: CellArea;
 }
 
@@ -45,24 +42,24 @@ const S = {
 
 function handlePurchase({
   dispatch,
-  character,
+  characterId,
   x,
   y,
   area,
 }: {
   dispatch: Dispatch;
-  character: BoardSquareProps['character'];
+  characterId?: string;
   x: number;
   y: number;
   area: CellArea;
 }) {
   return function() {
-    if (!character) return;
+    if (!characterId) return;
 
     dispatch({
       type: ActionType.BUY_CHARACTER,
       payload: {
-        character,
+        characterId,
         fromX: x,
         fromY: y,
         fromArea: area,
@@ -71,23 +68,29 @@ function handlePurchase({
   };
 }
 export default function ShopSlot(props: BoardSquareProps) {
-  const { dispatch } = useContext(BoardContext);
-  const character = props.character
-    ? characters[props.character.name].levels[props.character.level]
-    : undefined;
+  const { state, dispatch } = useContext(BoardContext);
+  function renderCharacter() {
+    if (!props.characterId) return null;
+    const character =
+      characters[state.ownedCharacters.byId[props.characterId].name].levels[
+        state.ownedCharacters.byId[props.characterId].level
+      ];
+
+      return <DraggableCharacter src={character.image} />;
+  }
 
   return (
     <S.ShopSlot
-      isCharacterAvailable={Boolean(character)}
+      isCharacterAvailable={Boolean(props.characterId)}
       onClick={handlePurchase({
         dispatch,
-        character: props.character,
+        characterId: props.characterId,
         x: props.x,
         y: props.y,
         area: props.area,
       })}
     >
-      {character && <DraggableCharacter src={character.image} />}
+     {renderCharacter()}
     </S.ShopSlot>
   );
 }

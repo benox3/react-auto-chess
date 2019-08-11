@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import characters, { CharNames, CharLevel } from './characters';
 import { useDrag } from 'react-dnd';
 import { DraggableTypes } from '../../../types';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { CellArea } from '../components/BoardContext';
+import { CellArea, BoardContext } from '../components/BoardContext';
 
 export const S = {
   Character: styled.div<{ src: string; isDragging: boolean }>`
@@ -33,18 +33,21 @@ const defaultProps = {
 };
 
 function Character(props: {
-  name: CharNames;
-  level: CharLevel;
+  id: string;
   x: number;
   y: number;
   area: CellArea;
   isDraggable: boolean;
 }) {
-  const character = characters[props.name].levels[props.level];
+  const { state } = useContext(BoardContext);
+  const character =
+    characters[state.ownedCharacters.byId[props.id].name].levels[
+      state.ownedCharacters.byId[props.id].level
+    ];
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: DraggableTypes.CHARACTER,
-      character,
+      id: props.id,
       x: props.x,
       y: props.y,
       area: props.area,

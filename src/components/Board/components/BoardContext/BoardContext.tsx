@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { CharNames, CharLevel } from '../../Character';
+import { CharNames, CharLevel } from '../../Character/characters';
 import { ROWS, COLUMNS } from '../../../../constants';
 
 export enum ActionType {
@@ -30,10 +30,7 @@ export type Action =
   | {
       type: ActionType.BUY_CHARACTER;
       payload: {
-        character: {
-          name: CharNames;
-          level: CharLevel;
-        };
+        characterId: string;
         fromX: number;
         fromY: number;
         fromArea: CellArea;
@@ -47,67 +44,89 @@ export type Action =
     };
 
 export type Dispatch = (value: Action) => void;
+export type Slot =
+  | {
+      characterId: string;
+    }
+  | undefined;
+
 export type State = {
-  [CellArea.BOARD]: ({ name: CharNames; level: CharLevel } | undefined)[][];
-  [CellArea.DECK]: ({ name: CharNames; level: CharLevel } | undefined)[][];
-  [CellArea.SHOP]: ({ name: CharNames; level: CharLevel } | undefined)[][];
+  ownedCharacters: {
+    byId: {
+      [key: string]: {
+        name: CharNames;
+        level: CharLevel;
+      };
+    };
+  };
+  [CellArea.BOARD]: (Slot)[][];
+  [CellArea.DECK]: (Slot)[][];
+  [CellArea.SHOP]: (Slot)[][];
   isShopOpen: boolean;
 };
 
 const MOCK_BOARD = [...new Array(ROWS)].map(() =>
   [...new Array(COLUMNS)].map(
-    (): { name: CharNames; level: 1 | 2 | 3 } | undefined => undefined
+    (): Slot => undefined
   )
 );
 
 const MOCK_DECK = [...new Array(1)].map(() =>
   [...new Array(COLUMNS)].map(
-    (): { name: CharNames; level: 1 | 2 | 3 } | undefined => undefined
+    (): Slot => undefined
   )
 );
 
 const MOCK_SHOP = [...new Array(1)].map(() =>
   [...new Array(COLUMNS)].map(
-    (): { name: CharNames; level: 1 | 2 | 3 } | undefined => undefined
+    (): Slot => undefined
   )
 );
 
 MOCK_BOARD[5][6] = {
-  name: CharNames.DRUID,
-  level: 1,
-};
+  characterId: '2',
+} as Slot;
 
 MOCK_BOARD[6][6] = {
-  name: CharNames.SORCERER,
-  level: 1,
-};
-console.log(MOCK_SHOP);
-
+  characterId: '1',
+} as Slot;
 MOCK_SHOP[0][0] = {
-  name: CharNames.SORCERER,
-  level: 1,
-};
+  characterId: '1',
+} as Slot;
 
 MOCK_SHOP[0][2] = {
-  name: CharNames.SORCERER,
-  level: 1,
-};
+  characterId: '1',
+} as Slot;
+
 
 MOCK_SHOP[0][3] = {
-  name: CharNames.SORCERER,
-  level: 1,
-};
+  characterId: '1',
+} as Slot;
+
 
 MOCK_SHOP[0][4] = {
-  name: CharNames.SORCERER,
-  level: 1,
-};
+  characterId: '1',
+} as Slot;
+
 
 const initialState = {
+  ownedCharacters: {
+    byId: {
+      '1': {
+        name: CharNames.DRUID,
+        level: 2 as CharLevel,
+      },
+      '2': {
+        name: CharNames.DRUID,
+        level: 2 as CharLevel,
+      },
+    },
+    allCharIds: [1, 2],
+  },
   board: MOCK_BOARD,
   deck: MOCK_DECK,
   shop: MOCK_SHOP,
-  isShopOpen: true,
+  isShopOpen: false,
 };
 
 function reducer(state: State, action: Action) {
@@ -116,13 +135,14 @@ function reducer(state: State, action: Action) {
       const nextState = { ...state };
 
       const originalPos =
-        nextState[action.payload.fromArea][action.payload.fromY][
-          action.payload.fromX
+        nextState[action.payload.fromArea][action.payload.fromX][
+          action.payload.fromY
         ];
       const nextPos =
-        nextState[action.payload.toArea][action.payload.toY][
-          action.payload.toX
+        nextState[action.payload.toArea][action.payload.toX][
+          action.payload.toY
         ];
+
 
       if (
         action.payload.toArea === action.payload.fromArea &&
@@ -134,11 +154,11 @@ function reducer(state: State, action: Action) {
         };
       }
 
-      nextState[action.payload.toArea][action.payload.toY][
-        action.payload.toX
+      nextState[action.payload.toArea][action.payload.toX][
+        action.payload.toY
       ] = originalPos;
-      nextState[action.payload.fromArea][action.payload.fromY][
-        action.payload.fromX
+      nextState[action.payload.fromArea][action.payload.fromX][
+        action.payload.fromY
       ] = nextPos;
 
       return {
@@ -152,13 +172,10 @@ function reducer(state: State, action: Action) {
         val => val === undefined
       );
       const nextState = state;
-      nextState[CellArea.DECK][0][nextAvailableSlot] = action.payload.character;
-      console.log(action.payload);
-      console.log(nextState[action.payload.fromArea]);
+      nextState[CellArea.DECK][0][nextAvailableSlot] = action.payload;
       nextState[action.payload.fromArea][action.payload.fromX][
         action.payload.fromY
       ] = undefined;
-      console.log(nextState[action.payload.fromArea]);
 
       return {
         ...state,

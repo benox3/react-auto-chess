@@ -33,10 +33,7 @@ export default function Cell(props: {
   x: number;
   y: number;
   area: CellArea;
-  character?: {
-    name: CharNames;
-    level: 1 | 2 | 3;
-  };
+  characterId?: string;
   isOver?: boolean;
   canDrop: boolean;
   dropRef: any;
@@ -48,10 +45,9 @@ export default function Cell(props: {
       ref={props.dropRef}
       isEven={(props.x + props.y) % 2 === 0}
     >
-      {props.character && (
+      {props.characterId && (
         <Character
-          level={props.character.level}
-          name={props.character.name}
+          id={props.characterId}
           x={props.x}
           y={props.y}
           area={props.area}

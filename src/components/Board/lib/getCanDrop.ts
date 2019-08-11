@@ -1,7 +1,7 @@
-import { COLUMNS } from '../../../constants';
+import { ROWS } from '../../../constants';
 import { CellArea } from '../components/BoardContext';
 
-export default function(y: number, area: CellArea) {
+export default function(x: number, area: CellArea) {
   if (area === CellArea.DECK) return true;
-  return y > COLUMNS / 2 - 1;
+  return x > ROWS / 2 - 1;
 }

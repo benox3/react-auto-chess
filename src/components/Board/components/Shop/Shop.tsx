@@ -28,17 +28,20 @@ export default function Shop() {
   return (
     <Portal>
       <S.Shop>
-        {state.shop.map((rows, rowIndex) => (
+        {state.deck.map((rows, rowIndex) => (
           <S.Row key={rowIndex}>
-            {rows.map((_, colIndex) => (
-              <ShopSlot
-                key={colIndex}
-                character={state.shop[rowIndex][colIndex]}
-                x={rowIndex}
-                y={colIndex}
-                area={CellArea.SHOP}
-              />
-            ))}
+            {rows.map((_, colIndex) => {
+              const slot = state.shop[rowIndex][colIndex];
+              return (
+                <ShopSlot
+                  key={colIndex}
+                  characterId={slot && slot.characterId}
+                  x={rowIndex}
+                  y={colIndex}
+                  area={CellArea.SHOP}
+                />
+              );
+            })}
           </S.Row>
         ))}
       </S.Shop>

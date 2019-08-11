@@ -44,15 +44,18 @@ export default function Board() {
       <S.Board>
         {state.board.map((rows, rowIndex) => (
           <S.Row key={rowIndex}>
-            {rows.map((_, colIndex) => (
-              <BoardCell
-                key={colIndex}
-                character={state.board[rowIndex][colIndex]}
-                x={colIndex}
-                y={rowIndex}
-                area={CellArea.BOARD}
-              />
-            ))}
+            {rows.map((_, colIndex) => {
+              const slot = state.board[rowIndex][colIndex];
+              return (
+                <BoardCell
+                  key={colIndex}
+                  characterId={slot && slot.characterId}
+                  x={rowIndex}
+                  y={colIndex}
+                  area={CellArea.BOARD}
+                />
+              );
+            })}
           </S.Row>
         ))}
       </S.Board>
@@ -60,15 +63,18 @@ export default function Board() {
       <S.Deck>
         {state.deck.map((rows, rowIndex) => (
           <S.Row key={rowIndex}>
-            {rows.map((_, colIndex) => (
-              <BoardCell
-                key={colIndex}
-                character={state.deck[rowIndex][colIndex]}
-                x={colIndex}
-                y={rowIndex}
-                area={CellArea.DECK}
-              />
-            ))}
+            {rows.map((_, colIndex) => {
+              const slot = state.deck[rowIndex][colIndex];
+              return (
+                <BoardCell
+                  key={colIndex}
+                  characterId={slot && slot.characterId}
+                  x={rowIndex}
+                  y={colIndex}
+                  area={CellArea.DECK}
+                />
+              );
+            })}
           </S.Row>
         ))}
       </S.Deck>
