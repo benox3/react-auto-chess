@@ -41,14 +41,14 @@ export default function Board() {
   return (
     <S.Game>
       <S.Board>
-        {state.board.map((rows, colIndex) => (
-          <S.Row key={colIndex}>
-            {rows.map((_, rowIndex) => (
+        {state.board.map((rows, rowIndex) => (
+          <S.Row key={rowIndex}>
+            {rows.map((_, colIndex) => (
               <BoardCell
-                key={rowIndex}
-                character={state.board[colIndex][rowIndex]}
-                x={rowIndex}
-                y={colIndex}
+                key={colIndex}
+                character={state.board[rowIndex][colIndex]}
+                x={colIndex}
+                y={rowIndex}
                 area={CellArea.BOARD}
               />
             ))}
@@ -57,14 +57,14 @@ export default function Board() {
       </S.Board>
       <S.Space />
       <S.Deck>
-        {state.deck.map((rows, colIndex) => (
-          <S.Row key={colIndex}>
-            {rows.map((_, rowIndex) => (
+        {state.deck.map((rows, rowIndex) => (
+          <S.Row key={rowIndex}>
+            {rows.map((_, colIndex) => (
               <BoardCell
-                key={rowIndex}
-                character={state.deck[colIndex][rowIndex]}
-                x={rowIndex}
-                y={colIndex}
+                key={colIndex}
+                character={state.deck[rowIndex][colIndex]}
+                x={colIndex}
+                y={rowIndex}
                 area={CellArea.DECK}
               />
             ))}

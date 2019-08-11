@@ -29,8 +29,8 @@ export type State = {
   [CellArea.DECK]: ({ name: CharNames; level: 1 | 2 | 3 } | undefined)[][];
 };
 
-const MOCK_BOARD = [...new Array(COLUMNS)].map(() =>
-  [...new Array(ROWS)].map(
+const MOCK_BOARD = [...new Array(ROWS)].map(() =>
+  [...new Array(COLUMNS)].map(
     (): { name: CharNames; level: 1 | 2 | 3 } | undefined => undefined
   )
 );
