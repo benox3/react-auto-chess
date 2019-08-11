@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
 import BoardCell from './components/BoardCell';
 import { BoardContext, CellArea } from './components/BoardContext';
+import Shop from './components/Shop';
 
 const S = {
   Game: styled.div`
@@ -71,6 +72,7 @@ export default function Board() {
           </S.Row>
         ))}
       </S.Deck>
+      {state.isShopOpen && <Shop />}
     </S.Game>
   );
 }

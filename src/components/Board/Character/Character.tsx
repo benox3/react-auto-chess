@@ -21,14 +21,24 @@ export const S = {
     opacity: ${props => (props.isDragging ? '0' : '1')};
     cursor: move;
   `,
+  CharacterWrapper: styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
+  `,
 };
 
-export default function Character(props: {
+const defaultProps = {
+  isDraggable: true,
+};
+
+function Character(props: {
   name: CharNames;
   level: CharLevel;
   x: number;
   y: number;
   area: CellArea;
+  isDraggable: boolean;
 }) {
   const character = characters[props.name].levels[props.level];
   const [{ isDragging }, drag, preview] = useDrag({
@@ -38,7 +48,7 @@ export default function Character(props: {
       x: props.x,
       y: props.y,
       area: props.area,
-      level: props.level,
+      level: 2,
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
@@ -55,15 +65,12 @@ export default function Character(props: {
   );
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <div />
+    <S.CharacterWrapper>
       <S.Character ref={drag} isDragging={isDragging} src={character.image} />
-    </div>
+    </S.CharacterWrapper>
   );
 }
+
+Character.defaultProps = defaultProps;
+
+export default Character;

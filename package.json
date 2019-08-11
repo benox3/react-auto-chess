@@ -23,16 +23,21 @@
     "react-dnd": "^9.3.4",
     "react-dnd-html5-backend": "^9.3.4",
     "react-dom": "^16.8.6",
+    "react-portal": "^4.2.0",
     "react-scripts": "3.0.1",
     "styled-components": "^4.3.2",
     "typescript": "3.5.3"
   },
   "devDependencies": {
+    "@types/react-portal": "^4.0.2",
     "@types/styled-components": "^4.1.18",
     "eslint-config-prettier": "^6.0.0"
   },
   "eslintConfig": {
-    "extends": ["react-app", "prettier"],
+    "extends": [
+      "react-app",
+      "prettier"
+    ],
     "rules": {
       "no-unexpected-multiline": false
     }
